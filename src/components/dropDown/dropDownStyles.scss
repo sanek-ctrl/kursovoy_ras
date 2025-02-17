@@ -1,21 +1,20 @@
 @import '../../styles/varibles';
 
-.container {
-    box-sizing: border-box;
+.drop-down {
     display: flex;
     flex-direction: column;
-    gap: 4px;
 
     &__lbl {
         color: $color-lbl;
         font-size: 14px;
 
-        &_strong{
+        &_strong {
             font-weight: 600;
         }
+
     }
 
-    &__input {
+    &__select {
         border: none;
         border-bottom: 1px solid $color-blue;
         outline: none;
@@ -23,19 +22,4 @@
         font-size: 14px;
     }
 
-    &__info {
-        font-size: 8px;
-
-        &_error {
-            color: red;
-        }
-
-        &_success {
-            color: lightgreen;
-        }
-
-        &_info {
-            color: lightblue;
-        }
-    }
 }

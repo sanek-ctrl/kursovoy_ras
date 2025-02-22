@@ -9,7 +9,7 @@ const staticElementsData = [
     { id: 2, title: 'Выучить С#' }, 
     { id: 3, title: 'Выучить Python'}, 
     { id: 4, title: 'Выучить C++'}
-]
+];
 
 export const MainPage: FC = () => {
 
@@ -18,9 +18,21 @@ export const MainPage: FC = () => {
     const [userActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
     const [elementToEdit, setElementToEdit] = useState(0);
 
+    const [title, setTitle] = useState('');
+
     useEffect(() => {
         setElementData(staticElementsData);
     }, []);
+
+    useEffect(() => {
+        setTitle('');
+        if (userActionMode === 'edit') {
+            const element = userActionMode === 'edit'
+                ? elementData.find(e => e.id === elementToEdit)
+                :undefined;
+        setTitle(element?.title ?? ''); 
+        }
+    }, [staticElementsData, userActionMode, elementToEdit]);
 
     const createElementHandler = () => {
         setUserActionMode('create');
@@ -29,16 +41,16 @@ export const MainPage: FC = () => {
 
     const editElementHandler = (id: number) => {
         setUserActionMode('edit');
-        setShowElementDialog(true);
         setElementToEdit(id);
+        setShowElementDialog(true);
     }
 
     const elementDialogContentRenderer = () => {
         return (
             <>
-                <TextField labelText='Название' />
+                <TextField labelText='Название' value={title} onChange={(val) => setTitle(val)} />
             </>
-        )
+        );
     }
 
     return (
@@ -54,19 +66,21 @@ export const MainPage: FC = () => {
                     selectedChanged={(val) => console.log(val)}
                     />
     
-            <PartitionList partitionList={ elementData }
+            <PartitionList 
+                partitionList={ elementData }
                 onItemClick={(id) => console.log(id)}
-                onItemDelete={(id) => console.log('delete', id)}
+                onItemDelete={(id) => console.log('delete ', id)}
                 onItemEdit={editElementHandler}
             />          
-                <Button text="Добавить цель" className="main-page__add-goal-btn"/>
+                <Button text="Добавить цель" className="main-page__add-goal-btn" onClick={createElementHandler}/>
                 </div>
                 <div>
                 <Dialog title={userActionMode !== 'edit' ? 'Добавить цель' : 'Редактировать цель'}
                     open = {showElementDialog}
                     onSave={() => {}}
-                
+                    onCancel={() => setShowElementDialog(false)}
                 >
+                    {elementDialogContentRenderer()}
                 </Dialog>
                     <div>
                         <span>Описание</span>

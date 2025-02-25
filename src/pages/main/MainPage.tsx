@@ -4,6 +4,7 @@ import { Button, DropDown, PartitionList, Dialog, TextField, TextArea } from '..
 import './mainPageStyles.scss';
 import { Partition, Element, GoalInfo } from '../../types/models';
 import { DropDownItem } from '../../components/dropDown/DropDownProps';
+import { UploadIcon } from '../../assets/icons';
 
 const initialElementsData: Array<Element> = [
     { 
@@ -163,6 +164,10 @@ export const MainPage: FC = () => {
         setSelectedElementId(id);
     };
 
+    const uploadFileHandler = () => {
+
+    }
+
     const selectedElement = elementData.find(e => e.id === selectedElementId);
 
     return (
@@ -190,21 +195,40 @@ export const MainPage: FC = () => {
                         onItemClick={(id) => onElementSelectedHandler(id)}
                         onItemDelete={(id) => console.log('delete ', id)}
                         onItemEdit={editElementHandler}
+                        selectedElementId={selectedElementId}
                     />
-                    <Button text="Добавить цель" className="main-page__add-goal-btn" onClick={createElementHandler} />
+                    <Button text="Добавить цель" className="main-page__btn" onClick={createElementHandler} />
                 </div>
-                {selectedElement && (
+                {selectedElement ? (
+                <div className="main-page__selected-element">
+                    <div className="main-page__description">
+                        <span>Описание</span>
+                        <div>{selectedElement.goalInfo[0].description}</div>
+                    </div>
+                    <div className="main-page__dates">
+                        <div>Дата создания: {selectedElement.goalInfo[0].onCreated}</div>
+                        <div>Дата обновления: {selectedElement.goalInfo[0].onUpdated}</div>
+                    </div>
+                    <div className="main-page__files-list">
+                        <div className="main-page__files-header">
+                            <h3>Файлы</h3>
+                            <div className="main-page__use-info-actions">
+                                <UploadIcon onClick={uploadFileHandler} />
+                            </div>
+                        </div>
+                        FilesList
+                    </div>
                     <div>
-                        <div>
-                            <span>Описание</span>
-                            <div>{selectedElement.goalInfo[0].description}</div>
-                        </div>
-                        <div>
-                            <div>Дата создания: {selectedElement.goalInfo[0].onCreated}</div>
-                            <div>Дата обновления: {selectedElement.goalInfo[0].onUpdated}</div>
-                        </div>
+                        <Button text="Завершить цель" className="main-page__btn"/>
+                    </div>
+                </div>
+                ) : (
+                    <div className="main-page__placeholder">
+                    <h3>Выберите цель</h3>
+                    <p>Для просмотра деталей выберите цель из списка слева.</p>
                     </div>
                 )}
+                
             </div>
         </Layout>
     );

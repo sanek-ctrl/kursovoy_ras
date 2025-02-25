@@ -5,21 +5,96 @@
     height: calc(100vh - 75px);
     display: flex;
     gap: 15px;
+    padding: 15px;
 
     &__list-container {
         min-width: 500px;
         max-width: 500px;
         border-right: 1px solid $color-dirtywhite;
-        box-shadow: 1px 0px 4px -3px $color-delimitershadow;
-        padding: 0 10px 0 0;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
         display: flex;
         flex-direction: column;
         gap: 30px;
     }
 
-    &__add-goal-btn {
+    &__btn {
         margin-top: auto;
         margin-bottom: 10px;
+        color: white;
+    }
+
+    &__use-info-actions {
+        min-height: 32px;
+        min-width: 32px;
+        display: flex;
+        justify-content: flex-end;
+
+        & svg {
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__selected-element {
+        flex: 1;
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid $color-dirtywhite;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__description {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        span {
+            font-size: 18px;
+            font-weight: 600;
+            color: $color-baseblack;
+        }
+
+        div {
+            font-size: 16px;
+            color: $color-baseblack;
+            line-height: 1.5;
+        }
+    }
+
+    &__dates {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        div {
+            font-size: 14px;
+            color: #666666;
+        }
+    }
+
+    &__files-list {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid $color-dirtywhite;
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: $color-baseblack;
+            margin-bottom: 10px;
+        }
     }
 
 }

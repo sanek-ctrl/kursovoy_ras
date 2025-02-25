@@ -1,0 +1,54 @@
+@import '../../styles/varibles';
+
+.text-area-container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    &__lbl {
+        color: $color-lbl;
+        font-size: 14px;
+
+        &_strong {
+            font-weight: 600;
+        }
+    }
+
+    &__textarea {
+        border: none;
+        border-bottom: 1px solid $color-blue;
+        outline: none;
+        padding: 0;
+        font-size: 14px;
+        resize: vertical; 
+        min-height: 100px;
+        background-color: transparent;
+        color: $color-baseblack;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+            border-bottom-color: darken($color-blue, 10%);
+        }
+
+        &_error {
+            border-bottom-color: red;
+        }
+    }
+
+    &__info {
+        font-size: 8px;
+
+        &_error {
+            color: red;
+        }
+
+        &_success {
+            color: lightgreen;
+        }
+
+        &_info {
+            color: lightblue;
+        }
+    }
+}

@@ -18,6 +18,7 @@
         font-weight: 500;
         border-bottom: 1px solid $color-dirtywhite;
         box-shadow: 0px 1px 1px -1px $color-delimitershadow;
+        transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease; 
 
         &_selected {
             background-color: #bfc3f762;
@@ -25,13 +26,13 @@
             &:hover {
                 background-color: #eaf3ff4d !important;
             }
-
         }
 
         &:hover {
             background-color: #f5f5f533;
+            color: $color-baseblack;
+            border-left: 4px solid $color-blue;
         }
-
     }
 
     &__item-title {
@@ -51,5 +52,4 @@
             }
         }
     }
-
 }

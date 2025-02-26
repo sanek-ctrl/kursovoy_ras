@@ -1,0 +1,41 @@
+@import '../../styles/varibles';
+
+.administration-page {
+    width: 100%;
+    height: calc(100vh - 75px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+
+    &__header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &__content {
+        flex: 1;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navigate-btn {
+        background-color: $color-blue;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: darken($color-blue, 10%);
+        }
+    }
+}

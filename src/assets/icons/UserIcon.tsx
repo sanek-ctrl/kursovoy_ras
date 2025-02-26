@@ -2,24 +2,27 @@ import { FC } from 'react';
 import { IconProps } from '../../types/commonTypes';
 
 export const UserIcon: FC<IconProps> = props => {
-
     const {
         className,
         color = '#ffffff',
-        height = 24,
-        width = 24,
+        height = 60,
+        width = 60,
         onClick
     } = props;
 
     return (
-        <svg fill={color} 
-        width={width}
-        height={height} 
-        className={className}
-        onClick={onClick}
-        viewBox="0 0 24 24" 
-        xmlns="http://www.w3.org/2000/svg">
-            <path d="M2,3V21a1,1,0,0,0,1,1H21a1,1,0,0,0,1-1V3a1,1,0,0,0-1-1H3A1,1,0,0,0,2,3ZM6.256,20a7,7,0,0,1,11.488,0ZM4,4H20V19.937a8.95,8.95,0,0,0-16,0Zm8,10a4,4,0,1,0-4-4A4,4,0,0,0,12,14Zm0-6a2,2,0,1,1-2,2A2,2,0,0,1,12,8Z"/>
+        <svg
+            width={width}
+            height={height}
+            className={className}
+            onClick={onClick}
+            fill={color}
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M12 2C6.579 2 2 6.579 2 12s4.579 10 10 10s10-4.579 10-10S17.421 2 12 2zm0 5c1.727 0 3 1.272 3 3s-1.273 3-3 3c-1.726 0-3-1.272-3-3s1.274-3 3-3zm-5.106 9.772c.897-1.32 2.393-2.2 4.106-2.2h2c1.714 0 3.209.88 4.106 2.2C15.828 18.14 14.015 19 12 19s-3.828-.86-5.106-2.228z"
+            />
         </svg>
     );
-}
+};

@@ -45,12 +45,12 @@ export const PartitionList: FC<PartitionListProps> = (props) => {
                         <PencilIcon
                             width={18}
                             height={18}
-                            onClick={() => partitionEditHandler(element.id)} // Исправлено
+                            onClick={() => partitionEditHandler(element.id)} 
                         />
                         <TrashIcon
                             width={18}
                             height={18}
-                            onClick={() => partitionDeleteHandler(element.id)} // Исправлено
+                            onClick={() => partitionDeleteHandler(element.id)} 
                         />
                     </div>
                 </div>

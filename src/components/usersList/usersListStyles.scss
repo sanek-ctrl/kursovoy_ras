@@ -1,0 +1,74 @@
+@import '../../styles/varibles';
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &_item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid $color-dirtywhite;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        transition: box-shadow 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        &-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            span {
+                font-size: 14px;
+                color: $color-baseblack;
+
+                strong {
+                    font-weight: 600;
+                }
+            }
+        }
+
+        &_actions {
+            display: flex;
+            gap: 10px;
+
+            .primary {
+                background-color: $color-blue;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: darken($color-blue, 10%);
+                }
+            }
+
+            .secondary {
+                background-color: $color-dirtywhite;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: darken($color-dirtywhite, 10%);
+                }
+            }
+        }
+    }
+}

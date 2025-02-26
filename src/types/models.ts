@@ -18,3 +18,9 @@ export interface Partition {
     elements: Array<Element>;
 }
 
+export interface User {
+    id: number;
+    login: string;
+    password: string;
+    role: 'admin' | 'moderator' | 'user';
+}

@@ -5,3 +5,4 @@ export { DropDown } from './dropDown';
 export { PartitionList } from './partitionList';
 export { Dialog } from './dialog';
 export { TextArea } from './textArea';
+export { UsersList } from "./usersList";

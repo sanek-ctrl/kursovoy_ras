@@ -1,4 +1,5 @@
 import { AxiosInstance } from './axiosInstance';
+import { AccessTokenKey } from '../constants/commonConstants';
 
 const {axiosPost} = AxiosInstance();
 
@@ -18,8 +19,11 @@ interface RegistrationRequestDto {
     password: string;
 }
 
-const signIn = async (loginData: LogimRequestDto) => 
-    await axiosPost('/login', loginData) as LogimResponseDto;
+const signIn = async (loginData: LogimRequestDto) => {
+    const data = await axiosPost('/login', loginData) as LogimResponseDto;
+    sessionStorage.setItem(AccessTokenKey, data.access_token);
+    return data;
+}
 
 const signUp = async(registrationData: RegistrationRequestDto) =>
     await axiosPost('/register', registrationData) as void;

@@ -22,20 +22,17 @@ export const LoginPage: FC = () => {
     }
 
     const loginHandler = () => {
-        /* console.log({
-            login,
-            password
-        });
-        // TODO: Доделать, когда будет апи
-        navigate(RoutesPaths.Main); */
-        
         signIn({login, password})
-            .then((resp) => {
-                console.log(resp);
+           .then((respData) => {
+                if(respData.role === 'user') {
+                    navigate(`/${RoutesPaths.NoPermissions}`);
+                } else {
+                    navigate(`/${RoutesPaths.Main}`);
+                }
             })
             .catch((err) => {
                 console.log(err);
-            });
+            });  
     }
 
     const toRegisrationHandler = () => {

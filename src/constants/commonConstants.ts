@@ -5,3 +5,5 @@ export enum RoutesPaths {
     Administration = 'administration',
     NoPermissions = 'noPermissions'
 }
+
+export const AccessTokenKey = 'AccessToken';

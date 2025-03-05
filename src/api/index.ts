@@ -1,1 +1,2 @@
-export { Auth } from './auth'
+export { Auth } from './auth';
+export { Goals } from './goals';

@@ -6,59 +6,60 @@ import { Partition, Element, GoalInfo } from '../../types/models';
 import { DropDownItem } from '../../components/dropDown/DropDownProps';
 import { UploadIcon } from '../../assets/icons';
 
-const initialElementsData: Array<Element> = [
-    { 
-        id: 1, 
-        title: 'Выучить Javascript', 
-        goalInfo: [{
-            id: 1,
-            description: "Выучить основы JavaScript, включая синтаксис и структуры данных.",
-            onCreated: '2023-01-01',
-            onUpdated: '2023-01-10',
-            isActive: true,
-        }]
-    }, 
-    { 
-        id: 2, 
-        title: 'Выучить С#', 
-        goalInfo: [{
-            id: 2,
-            description: "Изучение языка программирования C# и его применения в разработке приложений.",
-            onCreated: '2023-01-05',
-            onUpdated: '2023-01-15',
-            isActive: true,
-        }]
-    }, 
-    { 
-        id: 3, 
-        title: 'Выучить Python', 
-        goalInfo: [{
-            id: 3,
-            description: "Основы Python, включая работу с библиотеками и фреймворками.",
-            onCreated: '2023-01-10',
-            onUpdated: '2023-01-20',
-            isActive: true,
-        }]
-    }, 
-    { 
-        id: 4, 
-        title: 'Выучить C++', 
-        goalInfo: [{
-            id: 4,
-            description: "Изучение C++ и его особенностей, включая объектно-ориентированное программирование.",
-            onCreated: '2023-01-15',
-            onUpdated: '2023-01-25',
-            isActive: true,
-        }]
-    }
-];
+// const initialElementsData: Array<Element> = [
+//     { 
+//         id: 1, 
+//         title: 'Выучить Javascript', 
+//         goalInfo: [{
+//             id: 1,
+//             description: "Выучить основы JavaScript, включая синтаксис и структуры данных.",
+//             onCreated: '2023-01-01',
+//             onUpdated: '2023-01-10',
+//             isActive: true,
+//         }]
+//     }, 
+//     { 
+//         id: 2, 
+//         title: 'Выучить С#', 
+//         goalInfo: [{
+//             id: 2,
+//             description: "Изучение языка программирования C# и его применения в разработке приложений.",
+//             onCreated: '2023-01-05',
+//             onUpdated: '2023-01-15',
+//             isActive: true,
+//         }]
+//     }, 
+//     { 
+//         id: 3, 
+//         title: 'Выучить Python', 
+//         goalInfo: [{
+//             id: 3,
+//             description: "Основы Python, включая работу с библиотеками и фреймворками.",
+//             onCreated: '2023-01-10',
+//             onUpdated: '2023-01-20',
+//             isActive: true,
+//         }]
+//     }, 
+//     { 
+//         id: 4, 
+//         title: 'Выучить C++', 
+//         goalInfo: [{
+//             id: 4,
+//             description: "Изучение C++ и его особенностей, включая объектно-ориентированное программирование.",
+//             onCreated: '2023-01-15',
+//             onUpdated: '2023-01-25',
+//             isActive: true,
+//         }]
+//     }
+// ];
 
 const initialPartitionsData = [
-    { id: 1, title: 'Цели', elements: initialElementsData },
+    { id: 1, title: 'Цели', elements: [] },
     { id: 2, title: 'Достижения', elements: [] }
 ] as Array<Partition>;
 
 export const MainPage: FC = () => {
+
     const [partitionsData, setPartitionsData] = useState<Array<Partition>>([]);
     const [elementData, setElementData] = useState<Array<Element>>([]);
     const [selectedPartitionId, setSelectedPartitionId] = useState<number>(1); 
@@ -77,7 +78,7 @@ export const MainPage: FC = () => {
             if (Array.isArray(initialPartitionsData) && initialPartitionsData.length) {
                 setElementData(initialPartitionsData[0].elements);
             }
-        }, 2000);
+        }, 500);
     }, []);
 
     useEffect(() => {

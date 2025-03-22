@@ -5,145 +5,187 @@ import './mainPageStyles.scss';
 import { Partition, Element, GoalInfo } from '../../types/models';
 import { DropDownItem } from '../../components/dropDown/DropDownProps';
 import { UploadIcon } from '../../assets/icons';
+import { Goals } from '../../api/goals';
 
-const initialElementsData: Array<Element> = [
-    { 
-        id: 1, 
-        title: 'Выучить Javascript', 
-        goalInfo: [{
-            id: 1,
-            description: "Выучить основы JavaScript, включая синтаксис и структуры данных.",
-            onCreated: '2023-01-01',
-            onUpdated: '2023-01-10',
-            isActive: true,
-        }]
-    }, 
-    { 
-        id: 2, 
-        title: 'Выучить С#', 
-        goalInfo: [{
-            id: 2,
-            description: "Изучение языка программирования C# и его применения в разработке приложений.",
-            onCreated: '2023-01-05',
-            onUpdated: '2023-01-15',
-            isActive: true,
-        }]
-    }, 
-    { 
-        id: 3, 
-        title: 'Выучить Python', 
-        goalInfo: [{
-            id: 3,
-            description: "Основы Python, включая работу с библиотеками и фреймворками.",
-            onCreated: '2023-01-10',
-            onUpdated: '2023-01-20',
-            isActive: true,
-        }]
-    }, 
-    { 
-        id: 4, 
-        title: 'Выучить C++', 
-        goalInfo: [{
-            id: 4,
-            description: "Изучение C++ и его особенностей, включая объектно-ориентированное программирование.",
-            onCreated: '2023-01-15',
-            onUpdated: '2023-01-25',
-            isActive: true,
-        }]
-    }
+const initialPartitionsData: Partition[] = [
+    { id: 1, title: 'Цели', elements: [] },
+    { id: 2, title: 'Достижения', elements: [] }
 ];
 
-const initialPartitionsData = [
-    { id: 1, title: 'Цели', elements: initialElementsData },
-    { id: 2, title: 'Достижения', elements: [] }
-] as Array<Partition>;
-
 export const MainPage: FC = () => {
-    const [partitionsData, setPartitionsData] = useState<Array<Partition>>([]);
-    const [elementData, setElementData] = useState<Array<Element>>([]);
-    const [selectedPartitionId, setSelectedPartitionId] = useState<number>(1); 
-    const [selectedElementId, setSelectedElementId] = useState<number>();
+    const [partitionsData, setPartitionsData] = useState<Partition[]>(initialPartitionsData);
+    const [selectedPartitionId, setSelectedPartitionId] = useState<number>(1);
+    const [selectedElementId, setSelectedElementId] = useState<number | null>(null);
+    const [selectedElementInfo, setSelectedElementInfo] = useState<GoalInfo | null>(null);
     const [showElementDialog, setShowElementDialog] = useState(false);
     const [userActionMode, setUserActionMode] = useState<'create' | 'edit'>('create');
-    const [elementToEdit, setElementToEdit] = useState(0);
-
+    const [elementToEdit, setElementToEdit] = useState<Element | null>(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
-    useEffect(() => {
-        setTimeout(() => {
-            console.log("Data loaded:", initialPartitionsData);
-            setPartitionsData(initialPartitionsData); 
-            if (Array.isArray(initialPartitionsData) && initialPartitionsData.length) {
-                setElementData(initialPartitionsData[0].elements);
-            }
-        }, 2000);
-    }, []);
+    const fetchGoals = async (isActive?: boolean) => {
+        try {
+            const goals = await Goals.getGoals(isActive);
+            if (!goals) throw new Error('Данные не получены');
 
-    useEffect(() => {
-        const selectedPartition = partitionsData.find(p => p.id === selectedPartitionId);
-        setElementData(selectedPartition ? selectedPartition.elements : []);
-        setSelectedElementId(undefined);
-    }, [partitionsData, selectedPartitionId]);
+            const formattedGoals: Element[] = goals.map((goal: any) => ({
+                id: goal.id,
+                title: goal.title,
+                goalInfo: [{
+                    id: goal.id,
+                    description: goal.description || '',
+                    onCreated: goal.onCreated || new Date().toISOString(),
+                    onUpdated: goal.onUpdated || new Date().toISOString(),
+                    isActive: goal.isActive,
+                }],
+            }));
 
-    useEffect(() => {
-        if (userActionMode === 'edit') {
-            const element = elementData.find(e => e.id === elementToEdit);
-            if (element) {
-                setTitle(element.title); 
-                setDescription(element.goalInfo[0].description); 
-            }
+            setPartitionsData((prevPartitions) => prevPartitions.map((partition) => {
+                if (partition.id === 1 && isActive === true) {
+                    return { ...partition, elements: formattedGoals.filter((goal) => goal.goalInfo[0].isActive === true) };
+                } else if (partition.id === 2 && isActive === false) {
+                    return { ...partition, elements: formattedGoals.filter((goal) => goal.goalInfo[0].isActive === false) };
+                }
+                return partition;
+            }));
+        } catch (err) {
+            console.error('Ошибка:', err);
         }
-    }, [userActionMode, elementToEdit, elementData]);
+    };
+
+    useEffect(() => { fetchGoals(true); }, []);
+
+    useEffect(() => {
+        const fetchGoalDetails = async () => {
+            if (selectedElementId) {
+                try {
+                    const goalDetails = await Goals.getGoal(selectedElementId);
+                    setSelectedElementInfo({
+                        id: goalDetails.id,
+                        description: goalDetails.description || '',
+                        onCreated: goalDetails.onCreated || new Date().toISOString(),
+                        onUpdated: goalDetails.onUpdated || new Date().toISOString(),
+                        isActive: goalDetails.isActive,
+                    });
+                } catch (err) {
+                    console.error('Ошибка:', err);
+                }
+            }
+        };
+        fetchGoalDetails();
+    }, [selectedElementId]);
+
+    const saveElementHandler = async () => {
+        try {
+            if (userActionMode === 'create') {
+                const newGoal = await Goals.addGoal({ title, description, isActive: true });
+                const newElement: Element = {
+                    id: newGoal.id,
+                    title,
+                    goalInfo: [{
+                        id: newGoal.id,
+                        description,
+                        onCreated: new Date().toISOString(),
+                        onUpdated: new Date().toISOString(),
+                        isActive: true,
+                    }],
+                };
+
+                setPartitionsData((prevPartitions) => prevPartitions.map((partition) => {
+                    if (partition.id === 1) return { ...partition, elements: [...partition.elements, newElement] };
+                    return partition;
+                }));
+
+                setSelectedElementInfo({
+                    id: newGoal.id,
+                    description,
+                    onCreated: new Date().toISOString(),
+                    onUpdated: new Date().toISOString(),
+                    isActive: true,
+                });
+
+                await fetchGoals(true);
+            } else if (elementToEdit) {
+                await Goals.editGoal({ id: elementToEdit.id, title, description });
+
+                setPartitionsData((prevPartitions) => prevPartitions.map((partition) => ({
+                    ...partition,
+                    elements: partition.elements.map((element) => {
+                        if (element.id === elementToEdit.id) {
+                            return {
+                                ...element,
+                                title,
+                                goalInfo: [{ ...element.goalInfo[0], description, onUpdated: new Date().toISOString() }],
+                            };
+                        }
+                        return element;
+                    }),
+                })));
+
+                setSelectedElementInfo((prevInfo) => prevInfo ? {
+                    ...prevInfo,
+                    title,
+                    description,
+                    onUpdated: new Date().toISOString(),
+                } : null);
+            }
+        } catch (err) {
+            console.error('Ошибка:', err);
+        } finally {
+            setShowElementDialog(false);
+            clearElementDialogFields();
+        }
+    };
 
     const clearElementDialogFields = () => {
         setUserActionMode('create');
-        setElementToEdit(0);
+        setElementToEdit(null);
         setTitle('');
         setDescription('');
     };
 
-    const createElementHandler = () => {
-        setUserActionMode('create');
-        setShowElementDialog(true);
+    const partitionChangedHandler = async (id?: string) => {
+        if (id) {
+            setSelectedPartitionId(+id);
+            setSelectedElementId(null);
+            setSelectedElementInfo(null);
+            await fetchGoals(+id === 1);
+        }
     };
+
+    const onElementSelectedHandler = (id: number) => setSelectedElementId(id);
+    const uploadFileHandler = () => console.log('Загрузка файла');
+    const createElementHandler = () => { setUserActionMode('create'); setShowElementDialog(true); };
 
     const editElementHandler = (id: number) => {
-        setUserActionMode('edit');
-        setElementToEdit(id); 
-        setShowElementDialog(true); 
-    };
+        const element = partitionsData
+            .find((p) => p.id === selectedPartitionId)
+            ?.elements.find((e) => e.id === id);
 
-    const saveElementHandler = () => {
-        if (userActionMode === 'create') {
-        } else {
-            const updatedElements = elementData.map(e => {
-                if (e.id === elementToEdit) {
-                    return {
-                        ...e,
-                        title: title,
-                        goalInfo: [{
-                            ...e.goalInfo[0],
-                            description: description,
-                            onUpdated: new Date().toISOString().split('T')[0]
-                        }]
-                    };
-                }
-                return e;
-            });
-            setElementData(updatedElements);
+        if (element) {
+            setTitle(element.title);
+            setDescription(element.goalInfo[0].description);
+            setElementToEdit(element);
+            setUserActionMode('edit');
+            setShowElementDialog(true);
         }
-        setShowElementDialog(false);
-        clearElementDialogFields();
     };
 
-    const elementDialogContentRenderer = () => {
-        return (
-            <>
-                <TextField labelText='Название' value={title} onChange={(val) => setTitle(val)} />
-                <TextArea labelText='Описание' value={description} onChange={(val) => setDescription(val)} />
-            </>
-        );
+    const deleteElementHandler = async (id: number) => {
+        try {
+            await Goals.deleteGoal(id);
+            setPartitionsData((prevPartitions) => prevPartitions.map((partition) => ({
+                ...partition,
+                elements: partition.elements.filter((element) => element.id !== id),
+            })));
+
+            if (selectedElementId === id) {
+                setSelectedElementId(null);
+                setSelectedElementInfo(null);
+            }
+        } catch (err) {
+            console.error('Ошибка при удалении цели:', err);
+        }
     };
 
     const closeElementDialogHandler = () => {
@@ -151,84 +193,103 @@ export const MainPage: FC = () => {
         clearElementDialogFields();
     };
 
-    const partitionChangedHandler = (id?: string) => {
-        if (id) {
-            const _id = +id; 
-            setSelectedPartitionId(_id);
-        } else {
-            setSelectedPartitionId(1);
+    const completeGoalHandler = async (id: number) => {
+        try {
+            await Goals.completeGoal(id);
+
+            setPartitionsData((prevPartitions) => prevPartitions.map((partition) => ({
+                ...partition,
+                elements: partition.elements.map((element) => {
+                    if (element.id === id) {
+                        return {
+                            ...element,
+                            goalInfo: [{ ...element.goalInfo[0], isActive: false, onUpdated: new Date().toISOString() }],
+                        };
+                    }
+                    return element;
+                }),
+            })));
+
+            setSelectedElementInfo((prevInfo) => prevInfo ? {
+                ...prevInfo,
+                isActive: false,
+                onUpdated: new Date().toISOString(),
+            } : null);
+
+            await fetchGoals(true);
+        } catch (err) {
+            console.error('Ошибка при завершении цели:', err);
         }
     };
 
-    const onElementSelectedHandler = (id: number) => {
-        setSelectedElementId(id);
-    };
-
-    const uploadFileHandler = () => {
-
-    }
-
-    const selectedElement = elementData.find(e => e.id === selectedElementId);
+    const currentPartition = partitionsData.find((p) => p.id === selectedPartitionId);
+    const elements = currentPartition ? currentPartition.elements : [];
 
     return (
         <Layout>
             <Dialog
-                title={userActionMode !== 'edit' ? 'Добавить цель' : 'Редактировать цель'}
+                title={userActionMode === 'create' ? 'Добавить цель' : 'Редактировать цель'}
                 open={showElementDialog}
                 onSave={saveElementHandler}
                 onCancel={closeElementDialogHandler}
             >
-                {elementDialogContentRenderer()}
+                <TextField labelText="Название" value={title} onChange={(val) => setTitle(val)} />
+                <TextArea labelText="Описание" value={description} onChange={(val) => setDescription(val)} />
             </Dialog>
             <div className="main-page">
                 <div className="main-page__list-container">
                     <DropDown
-                        items={partitionsData.map(pd => ({
-                            text: pd.title,
-                            value: pd.id.toString()
-                        }))}
+                        items={partitionsData.map((pd) => ({ text: pd.title, value: pd.id.toString() }))}
                         label="Разделы:"
                         selectedChanged={(val) => partitionChangedHandler(val)}
                     />
                     <PartitionList
-                        partitionList={elementData}
+                        partitionList={elements}
                         onItemClick={(id) => onElementSelectedHandler(id)}
-                        onItemDelete={(id) => console.log('delete ', id)}
-                        onItemEdit={editElementHandler}
-                        selectedElementId={selectedElementId}
+                        onItemEdit={selectedPartitionId === 1 ? editElementHandler : undefined}
+                        onItemDelete={deleteElementHandler}
+                        selectedElementId={selectedElementId || undefined}
+                        selectedPartitionId={selectedPartitionId}
                     />
-                    <Button text="Добавить цель" className="main-page__btn" onClick={createElementHandler} />
+                    {selectedPartitionId === 1 && (
+                        <Button text="Добавить цель" className="main-page__btn" onClick={createElementHandler} />
+                    )}
                 </div>
-                {selectedElement ? (
-                <div className="main-page__selected-element">
-                    <div className="main-page__description">
-                        <span>Описание</span>
-                        <div>{selectedElement.goalInfo[0].description}</div>
-                    </div>
-                    <div className="main-page__dates">
-                        <div>Дата создания: {selectedElement.goalInfo[0].onCreated}</div>
-                        <div>Дата обновления: {selectedElement.goalInfo[0].onUpdated}</div>
-                    </div>
-                    <div className="main-page__files-list">
-                        <div className="main-page__files-header">
-                            <h3>Файлы</h3>
-                            <div className="main-page__use-info-actions">
-                                <UploadIcon onClick={uploadFileHandler} />
-                            </div>
+                {selectedElementInfo ? (
+                    <div className="main-page__selected-element">
+                        <div className="main-page__description">
+                            <span>Описание</span>
+                            <div>{selectedElementInfo.description}</div>
                         </div>
-                        FilesList
+                        <div className="main-page__dates">
+                            <div>Дата создания: {selectedElementInfo.onCreated}</div>
+                            <div>Дата обновления: {selectedElementInfo.onUpdated}</div>
+                        </div>
+                        <div className="main-page__files-list">
+                            <div className="main-page__files-header">
+                                <h3>Файлы</h3>
+                                <div className="main-page__use-info-actions">
+                                    <UploadIcon onClick={uploadFileHandler} />
+                                </div>
+                            </div>
+                            FilesList
+                        </div>
+                        {selectedElementInfo.isActive && selectedPartitionId === 1 && (
+                            <div>
+                                <Button
+                                    text="Завершить цель"
+                                    className="main-page__btn"
+                                    onClick={() => completeGoalHandler(selectedElementInfo.id)}
+                                />
+                            </div>
+                        )}
                     </div>
-                    <div>
-                        <Button text="Завершить цель" className="main-page__btn"/>
-                    </div>
-                </div>
                 ) : (
                     <div className="main-page__placeholder">
-                    <h3>Выберите цель</h3>
-                    <p>Для просмотра деталей выберите цель из списка слева.</p>
+                        <h3>Выберите цель</h3>
+                        <p>Для просмотра деталей выберите цель из списка слева.</p>
                     </div>
                 )}
-                
             </div>
         </Layout>
     );

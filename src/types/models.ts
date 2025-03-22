@@ -22,5 +22,5 @@ export interface User {
     id: number;
     login: string;
     password: string;
-    role: 'admin' | 'moderator' | 'user';
+    role: 'admin' | 'user';
 }

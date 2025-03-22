@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const AxiosInstance = (accessToken: string = '') => {
     const axiosInstance = axios.create({
-        baseURL: 'https://localhost:7045',
+        baseURL: 'http://localhost:5000',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': 'true',
@@ -10,8 +10,8 @@ export const AxiosInstance = (accessToken: string = '') => {
         }
     });
 
-    const axiosGet = async (url: string = '') => {
-        const response = await axiosInstance.get(url);
+    const axiosGet = async (url: string = '', params: object = {}) => {
+        const response = await axiosInstance.get(url, { params }); 
         return response.data;
     }
 
@@ -29,10 +29,10 @@ export const AxiosInstance = (accessToken: string = '') => {
         return response.data;
     }
     
-    const axiosDelete = async (url: string = '') => {
-        const response = await axiosInstance.delete(url);
+    const axiosDelete = async (url: string, config?: any) => {
+        const response = await axiosInstance.delete(url, config); 
         return response.data;
-    }
+    };
     
     return {
         axiosGet,

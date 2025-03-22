@@ -10,8 +10,8 @@ export const AxiosInstance = (accessToken: string = '') => {
         }
     });
 
-    const axiosGet = async (url: string = '') => {
-        const response = await axiosInstance.get(url);
+    const axiosGet = async (url: string = '', params: object = {}) => {
+        const response = await axiosInstance.get(url, { params }); 
         return response.data;
     }
 
@@ -29,10 +29,10 @@ export const AxiosInstance = (accessToken: string = '') => {
         return response.data;
     }
     
-    const axiosDelete = async (url: string = '') => {
-        const response = await axiosInstance.delete(url);
+    const axiosDelete = async (url: string, config?: any) => {
+        const response = await axiosInstance.delete(url, config); 
         return response.data;
-    }
+    };
     
     return {
         axiosGet,

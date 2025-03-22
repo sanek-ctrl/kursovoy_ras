@@ -11,6 +11,7 @@ export const PartitionList: FC<PartitionListProps> = (props) => {
         onItemDelete,
         onItemEdit,
         selectedElementId,
+        selectedPartitionId,
     } = props;
 
     const partitionClickHandler = (id: number) => {
@@ -32,7 +33,7 @@ export const PartitionList: FC<PartitionListProps> = (props) => {
         <div className="element-list">
             {partitionList.map((element) => (
                 <div
-                    key={element.id}
+                    key={element.id} // Убедитесь, что element.id уникален
                     className={clsx('element-list__item', {
                         'element-list__item-selected': isSelected(element.id),
                     })}
@@ -42,11 +43,13 @@ export const PartitionList: FC<PartitionListProps> = (props) => {
                         {element.title}
                     </div>
                     <div className="element-list__item_actions">
-                        <PencilIcon
+                        {selectedPartitionId === 1 && ( // Отображаем иконку карандаша только для раздела "Цели"
+                            <PencilIcon
                             width={18}
                             height={18}
                             onClick={() => partitionEditHandler(element.id)} 
                         />
+                        )}
                         <TrashIcon
                             width={18}
                             height={18}

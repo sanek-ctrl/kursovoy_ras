@@ -4,8 +4,10 @@ import { AddGoalResponseDto, EditGoalResponseDto } from '../types/apiTypes';
 
 const { axiosDelete, axiosGet, axiosPut, axiosPost } = AxiosInstance(sessionStorage.getItem(AccessTokenKey) ?? '');
 
-const getGoals = async () => {
-    const response = await axiosGet('/api/Goals/all');
+const getGoals = async (isActive?: boolean) => {
+    const response = await axiosGet('/api/Goals/all', {
+        params: { isActive } 
+    });
     return response; 
 };
 
@@ -25,8 +27,13 @@ const editGoal = async (editGoalData: EditGoalResponseDto) => {
 };
 
 const deleteGoal = async (id: string | number) => {
-    const response = await axiosDelete(`/api/Goals?id=${id}`);
-    return response; 
+    const response = await axiosDelete('/api/Goals', { data: { id } }); 
+    return response;
+};
+
+const completeGoal = async (id: string | number) => {
+    const response = await axiosPost('/api/Goals/complete', { id });
+    return response;
 };
 
 export const Goals = {
@@ -34,5 +41,6 @@ export const Goals = {
     getGoal,
     addGoal,
     editGoal,
-    deleteGoal
+    deleteGoal,
+    completeGoal
 };

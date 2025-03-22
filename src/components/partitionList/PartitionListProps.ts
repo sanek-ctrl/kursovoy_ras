@@ -6,4 +6,5 @@ export interface PartitionListProps {
     onItemEdit?: (id: number) => void;
     onItemDelete?: (id: number) => void;
     selectedElementId?: number;
+    selectedPartitionId?: number;
 }

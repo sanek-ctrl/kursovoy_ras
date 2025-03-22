@@ -17,10 +17,12 @@ export interface RegistrationRequestDto {
 export interface AddGoalResponseDto {
     title: string,
     description: string
+    isActive?: boolean; 
 };
 
 export interface EditGoalResponseDto {
     id: number,
-    title: string,
-    description: string
+    title?: string,
+    description?: string
+    isActive?: boolean; 
 }

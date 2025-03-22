@@ -32,6 +32,7 @@ export const LoginPage: FC = () => {
         signIn({login, password})
             .then((resp) => {
                 console.log(resp);
+                navigate(RoutesPaths.Main);
             })
             .catch((err) => {
                 console.log(err);

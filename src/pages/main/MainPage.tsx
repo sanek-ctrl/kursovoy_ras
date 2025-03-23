@@ -6,6 +6,9 @@ import { Partition, Element, GoalInfo } from '../../types/models';
 import { DropDownItem } from '../../components/dropDown/DropDownProps';
 import { UploadIcon } from '../../assets/icons';
 import { Goals } from '../../api/goals';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxToolkitHooks';
+import { useNavigate } from 'react-router-dom';
+import { RoutesPaths } from '../../constants/commonConstants';
 
 const initialPartitionsData: Partition[] = [
     { id: 1, title: 'Цели', elements: [] },
@@ -13,6 +16,10 @@ const initialPartitionsData: Partition[] = [
 ];
 
 export const MainPage: FC = () => {
+    const {accessToken, role} = useAppSelector((state) => state.user);
+    const navigate = useNavigate();
+    //const dispatch = useAppDispatch();
+
     const [partitionsData, setPartitionsData] = useState<Partition[]>(initialPartitionsData);
     const [selectedPartitionId, setSelectedPartitionId] = useState<number>(1);
     const [selectedElementId, setSelectedElementId] = useState<number | null>(null);
@@ -22,6 +29,14 @@ export const MainPage: FC = () => {
     const [elementToEdit, setElementToEdit] = useState<Element | null>(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+
+    useEffect(() => {
+        if(accessToken) {
+            navigate(`${RoutesPaths.Main}`);
+        } else {
+            navigate(`${RoutesPaths.Login}`);
+        }
+    }, [accessToken, role, navigate])
 
     const fetchGoals = async (isActive?: boolean) => {
         try {

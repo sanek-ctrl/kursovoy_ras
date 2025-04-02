@@ -13,20 +13,18 @@ export const Layout: FC<LayoutProps> = (props) => {
     const { footer, headerChild, title, children } = props;
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
-    // Получаем данные пользователя из Redux store
+    
     const { userName, role } = useAppSelector((state) => state.user);
 
     const logOutHandler = () => {
         dispatch(logOut());
-        navigate(RoutesPaths.Login); // Перенаправляем на страницу входа после выхода
+        navigate(RoutesPaths.Login); 
     };
 
     const goToAdministrationHandler = () => {
         navigate(RoutesPaths.Administration);
     };
 
-    // Формируем пункты меню
     const menuItems: MenuItem[] = [
         ...(role === 'admin' ? [{
             id: 'administration',

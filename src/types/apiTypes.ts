@@ -57,3 +57,21 @@ export interface GoalDto {
     login: string;
     role: 'admin' | 'user';
 }
+
+export interface DownloadFileResponseDto {
+  displayName: string;
+  systemName: string;
+}
+
+export interface UploadFileResponseDto {
+  fileId: number;
+  systemName: string;
+  displayName: string;
+  goalId: number;
+}
+
+export interface UploadFileRequestDto {
+  fileString: string;
+  fileName: string;
+  goalId: number;
+}

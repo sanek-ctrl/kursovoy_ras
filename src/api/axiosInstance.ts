@@ -34,11 +34,19 @@ export const AxiosInstance = (accessToken: string = '') => {
         return response.data;
     };
     
+    const axiosBlob = async(url: string ='', data: object ={}) => {
+        const response = await axiosInstance.post(url, data, {
+            responseType: `blob`
+        });
+        return response.data;
+    }
+
     return {
         axiosGet,
         axiosPost,
         axiosPut,
         axiosPatch,
-        axiosDelete
+        axiosDelete,
+        axiosBlob
     }
 }

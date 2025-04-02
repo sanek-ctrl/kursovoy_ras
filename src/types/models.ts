@@ -1,9 +1,18 @@
+export interface GoalFile {
+    id: number;
+    systemName: string;
+    displayName: string;
+    goalId: number;
+    uploadDate: string;
+}
+
 export interface GoalInfo {
     id: number;
     description: string;
     onCreated: string;
     onUpdated: string;
     isActive: boolean;
+    files?: Array<GoalFile>; 
 }
 
 export interface Element {

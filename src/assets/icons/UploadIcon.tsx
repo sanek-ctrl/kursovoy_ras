@@ -5,8 +5,8 @@ export const UploadIcon: FC<IconProps> = (props) => {
     const {
         className,
         color = '#1e1e1e',
-        height = 32,
-        width = 32,
+        height = 24,
+        width = 24,
         onClick,
     } = props;
 

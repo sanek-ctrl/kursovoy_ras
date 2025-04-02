@@ -1,41 +1,74 @@
-@import '../../styles/varibles';
-
 .administration-page {
-    width: 100%;
-    height: calc(100vh - 75px);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    padding: 1rem;
 
     &__header {
-        display: flex;
-        justify-content: flex-end;
-        padding: 10px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem; // Добавляем отступ под кнопкой "На главную"
     }
 
     &__content {
-        flex: 1;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 2rem;
+        min-height: 70vh;
     }
 
-    .navigate-btn {
-        background-color: $color-blue;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+    .users-section {
+        flex: 1;
+    }
 
-        &:hover {
-            background-color: darken($color-blue, 10%);
+    .goals-section {
+        flex: 1;
+        padding: 1.5rem;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+
+        h3 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .goals-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+
+            .goal-item {
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background: white;
+
+                h4 {
+                    margin: 0 0 0.5rem 0;
+                    color: #333;
+                }
+
+                p {
+                    margin: 0 0 0.5rem 0;
+                    color: #666;
+                }
+
+                .goal-status {
+                    font-size: 0.8rem;
+                    color: #888;
+                }
+            }
         }
     }
 }

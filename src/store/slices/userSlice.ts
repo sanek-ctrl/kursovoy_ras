@@ -23,6 +23,7 @@ interface UserState {
     userName?: string | null;
     role?: string | null;
     userError?: string | null;
+    username?: string;
 }
 
 const initialState: UserState = {

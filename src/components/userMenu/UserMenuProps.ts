@@ -5,5 +5,6 @@ export interface MenuItem {
 }
 
 export interface UserMenuProps {
-    items: Array<MenuItem>
+    items: MenuItem[];
+    username?: string;
 }

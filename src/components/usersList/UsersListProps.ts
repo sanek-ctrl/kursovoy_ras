@@ -6,5 +6,5 @@ export interface UsersListProps {
     onRemoveAdmin: (id: number) => void;
     onViewGoals: (id: number) => void;
     selectedUserId?: number | null;
-    currentUserId?: number | null; // Добавляем currentUserId
+    currentUserId?: number | null;
 }

@@ -33,7 +33,7 @@ export const PartitionList: FC<PartitionListProps> = (props) => {
         <div className="element-list">
             {partitionList.map((element) => (
                 <div
-                    key={element.id} // Убедитесь, что element.id уникален
+                    key={element.id} 
                     className={clsx('element-list__item', {
                         'element-list__item-selected': isSelected(element.id),
                     })}
@@ -43,7 +43,7 @@ export const PartitionList: FC<PartitionListProps> = (props) => {
                         {element.title}
                     </div>
                     <div className="element-list__item_actions">
-                        {selectedPartitionId === 1 && ( // Отображаем иконку карандаша только для раздела "Цели"
+                        {selectedPartitionId === 1 && ( 
                             <PencilIcon
                             width={18}
                             height={18}

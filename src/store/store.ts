@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { userReducer } from './slices/userSlice';
-import { goalReducer } from './slices/goalSlice'; // Добавляем импорт редьюсера целей
+import { goalReducer } from './slices/goalSlice'; 
 import { adminReducer } from './slices/adminSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    goal: goalReducer, // Добавляем редьюсер целей в хранилище
+    goal: goalReducer, 
     admin: adminReducer
   }
 });

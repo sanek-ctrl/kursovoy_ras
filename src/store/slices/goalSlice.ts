@@ -45,7 +45,6 @@ const goalSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Загрузка целей
       .addCase(fetchGoals.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -56,19 +55,13 @@ const goalSlice = createSlice({
         state.activeGoals = action.payload.filter(goal => goal.isActive);
         state.completedGoals = action.payload.filter(goal => !goal.isActive);
       })
-      
-      // Получение цели по ID
       .addCase(fetchGoalById.fulfilled, (state, action: PayloadAction<GoalDto>) => {
         state.selectedGoal = action.payload;
       })
-      
-      // Создание цели
       .addCase(createGoal.fulfilled, (state, action: PayloadAction<GoalDto>) => {
         state.activeGoals.unshift(action.payload);
         state.goals.unshift(action.payload);
       })
-      
-      // Обновление цели
       .addCase(updateGoal.fulfilled, (state, action: PayloadAction<GoalDto>) => {
         const { id } = action.payload;
         
@@ -90,8 +83,6 @@ const goalSlice = createSlice({
           state.selectedGoal = action.payload;
         }
       })
-      
-      // Удаление цели
       .addCase(deleteGoal.fulfilled, (state, action: PayloadAction<number>) => {
         const id = action.payload;
         state.goals = state.goals.filter(goal => goal.id !== id);
@@ -102,8 +93,6 @@ const goalSlice = createSlice({
           state.selectedGoal = null;
         }
       })
-      
-      // Завершение цели
       .addCase(completeGoal.fulfilled, (state, action: PayloadAction<GoalDto>) => {
         const completedGoal = action.payload;
         

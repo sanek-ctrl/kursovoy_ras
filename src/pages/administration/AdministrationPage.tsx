@@ -1,58 +1,44 @@
 import { FC, useEffect, useState } from 'react';
 import { Layout } from '../../components/layots';
 import { UsersList } from '../../components/usersList';
-import { User } from '../../types/models';
 import { Button } from '../../components';
 import { useNavigate } from 'react-router-dom';
-import { RoutesPaths } from '../../constants/commonConstants';
+import { RoutesPaths, UserNameKey } from '../../constants/commonConstants';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxToolkitHooks';
+import {
+    fetchAllUsers,
+    promoteToAdmin,
+    demoteFromAdmin,
+    fetchUserGoals
+} from '../../services/adminService';
 import './administrationPageStyles.scss';
 
-const staticUserListData: Array<User> = [
-    {
-        id: 1,
-        login: 'user',
-        password: '1234',
-        role: 'user'
-    },
-    {
-        id: 2,
-        login: 'admin',
-        password: 'admin',
-        role: 'admin'
-    },
-];
-
 export const AdministrationPage: FC = () => {
-    const [users, setUsers] = useState<Array<User>>([]);
+    const dispatch = useAppDispatch();
+    const { users, userGoals, loading, error } = useAppSelector((state) => state.admin);
+    const { userName } = useAppSelector((state) => state.user);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setTimeout(() => {
-            setUsers(staticUserListData);
-        }, 500);
-    }, []);
+        dispatch(fetchAllUsers());
+    }, [dispatch]);
 
-    const setAdminRoleHandler = (id: number) => {
-        setUsers(prev => {
-            const cloneArray = [...prev];
-            const currentUser = cloneArray.find(u => u.id === id);
-            if (currentUser) {
-                currentUser.role = 'admin';
-            }
-            return cloneArray;
-        });
+    const handleMakeAdmin = (id: number) => {
+        dispatch(promoteToAdmin(id));
     };
 
-    const resetPermissionsHandler = (id: number) => {
-        setUsers(prev => {
-            const cloneArray = [...prev];
-            const currentUser = cloneArray.find(u => u.id === id);
-            if (currentUser) {
-                currentUser.role = 'user';
-            }
-            return cloneArray;
-        });
+    const handleRemoveAdmin = (id: number) => {
+        dispatch(demoteFromAdmin(id));
     };
+
+    const handleViewGoals = async (id: number) => {
+        setSelectedUserId(id);
+        await dispatch(fetchUserGoals(id));
+    };
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <Layout title="Администрирование">
@@ -60,17 +46,49 @@ export const AdministrationPage: FC = () => {
                 <div className="administration-page__header">
                     <Button
                         text="На главную"
-                        onClick={() => navigate(`/${RoutesPaths.Main}`)}
+                        onClick={() => navigate(`${RoutesPaths.Main}`)}
                         className="navigate-btn"
                         type="primary"
                     />
                 </div>
                 <div className="administration-page__content">
-                    <UsersList
-                        onSetAdminRole={setAdminRoleHandler}
-                        onResetPermissions={resetPermissionsHandler}
-                        usersList={users}
-                    />
+                    <div className="users-section">
+                        <UsersList
+                            usersList={users}
+                            onMakeAdmin={handleMakeAdmin}
+                            onRemoveAdmin={handleRemoveAdmin}
+                            onViewGoals={handleViewGoals}
+                            selectedUserId={selectedUserId}
+                            currentUserLogin={userName}
+                        />
+                    </div>
+                    
+                    <div className="goals-section">
+                        {selectedUserId ? (
+                            <>
+                                <h3>Цели пользователя #{selectedUserId}</h3>
+                                {userGoals.length === 0 ? (
+                                    <p>У пользователя нет целей</p>
+                                ) : (
+                                    <ul className="goals-list">
+                                        {userGoals.map((goal) => (
+                                            <li key={goal.id} className="goal-item">
+                                                <h4>{goal.title}</h4>
+                                                <p>{goal.description}</p>
+                                                <div className="goal-status">
+                                                    Статус: {goal.isActive ? 'Активна' : 'Завершена'}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </>
+                        ) : (
+                            <div className="empty-state">
+                                Нажмите "Просмотреть цели" для отображения списка
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </Layout>

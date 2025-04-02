@@ -21,6 +21,6 @@ export interface Partition {
 export interface User {
     id: number;
     login: string;
-    password: string;
+    password?: string; 
     role: 'admin' | 'user';
 }

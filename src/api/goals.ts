@@ -36,11 +36,17 @@ const completeGoal = async (id: string | number) => {
     return response;
 };
 
+const getGoalRecommendations = async (goalId: string | number) => {
+    const response = await axiosPost(`/api/Goals/${goalId}/recommendations`, {});
+    return response;
+};
+
 export const Goals = {
     getGoals,
     getGoal,
     addGoal,
     editGoal,
     deleteGoal,
-    completeGoal
+    completeGoal,
+    getGoalRecommendations
 };

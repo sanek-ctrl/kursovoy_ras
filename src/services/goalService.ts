@@ -7,6 +7,7 @@ import {
   UpdateGoalRequestDto,
   CompleteGoalRequestDto
 } from '../types/apiTypes';
+import { RootState } from '../store';
 
 const NAMESPACE = 'goal';
 
@@ -76,4 +77,20 @@ export const completeGoal = createAsyncThunk<GoalDto, number, AsyncThunkOptions>
       return rejectWithValue((error as Error).message);
     }
   }
+)
+
+export const getGoalRecommendations = createAsyncThunk<string, number, AsyncThunkOptions>(
+    `${NAMESPACE}/getRecommendations`,
+    async (goalId, { getState, rejectWithValue }) => {
+      const state = getState() as RootState;
+      if (state.goal.cachedRecommendations[goalId]) {
+        return state.goal.cachedRecommendations[goalId];
+      }
+      try {
+        return await Goals.getGoalRecommendations(goalId);
+      } catch (error) {
+        return rejectWithValue((error as Error).message);
+      }
+    }
+
 );

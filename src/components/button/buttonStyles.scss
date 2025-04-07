@@ -13,7 +13,7 @@
         align-items: center;
         justify-content: center;
         min-width: 180px;
-        color: #333333;
+        color: #ffffff;
         border: 1px solid lightgray;
 
     &:hover {
@@ -22,7 +22,7 @@
 
     &_primary {
         background: #3369f3;
-        color: #ffffff;
+        color: #ffffff !important;
         border: none;
     }
 

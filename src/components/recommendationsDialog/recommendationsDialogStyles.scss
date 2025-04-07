@@ -1,0 +1,45 @@
+.recommendations-content {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .recommendations-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    color: var(--text-secondary);
+  }
+  
+  .recommendations-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    color: var(--error-color);
+    gap: 12px;
+  }
+  
+  .recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  
+  .recommendation-item {
+    padding: 8px 12px;
+    background: var(--background-secondary);
+    border-radius: 4px;
+    line-height: 1.5;
+  }
+  
+  .retry-button {
+    margin-top: 12px;
+    align-self: center;
+  }

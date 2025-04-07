@@ -5,7 +5,7 @@ import clsx from 'classnames';
 import { Button } from '../button';
 
 export const Dialog: FC<DialogProps> = props => {
-    const { className, title, children, onCancel, onSave, open=false } = props; 
+    const { className, title, children, onCancel, onSave, open=false, cancelButtonType = 'secondary' } = props; 
 
     if (!open) { 
         return null;
@@ -24,8 +24,10 @@ export const Dialog: FC<DialogProps> = props => {
                     {children}
                 </div>
                 <div className='dialog__footer'>
-                    <Button type='primary' text='Сохранить' onClick={onSave}/>
-                    <Button type='secondary' text='Отмена' onClick={onCancel}/>
+                    {onSave && ( 
+                        <Button type='primary' text='Сохранить' onClick={onSave}/>
+                    )}
+                    <Button type={cancelButtonType} text='Закрыть' onClick={onCancel}/>
                 </div>
             </div>
         </div>

@@ -6,3 +6,4 @@ export { PartitionList } from './partitionList';
 export { Dialog } from './dialog';
 export { TextArea } from './textArea';
 export { UsersList } from "./usersList";
+export { RecommendationsDialog } from './recommendationsDialog';

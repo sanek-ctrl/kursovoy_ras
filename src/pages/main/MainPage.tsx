@@ -20,6 +20,7 @@ import { clearSelectedGoal } from '../../store/slices/goalSlice';
 import { GoalDto } from '../../types/apiTypes';
 import { FilesList } from '../../components/filesList/FilesList';
 import { FilesApi } from '../../api/files';
+import { RecommendationsDialog } from '../../components/recommendationsDialog/RecommendationsDialog';
 
 export const MainPage: FC = () => {
     const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ export const MainPage: FC = () => {
     const [description, setDescription] = useState('');
     const [files, setFiles] = useState<GoalFile[]>([]);
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
+    const [showRecommendationsDialog, setShowRecommendationsDialog] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -305,9 +307,25 @@ export const MainPage: FC = () => {
                 {selectedElementInfo ? (
                     <div className="main-page__selected-element">
                         <div className="main-page__description">
+                        <RecommendationsDialog
+                            goalId={selectedElementInfo.id}
+                            goalTitle={selectedGoal?.title || ''}
+                            open={showRecommendationsDialog}
+                            onClose={() => setShowRecommendationsDialog(false)}
+                        />
                             <span>Описание</span>
                             <div>{selectedElementInfo.description}</div>
+                            
                         </div>
+                        {selectedElementInfo.isActive && selectedPartitionId === 1 && (
+                            <div>
+                                <Button
+                                    text="AI-Рекомендации"
+                                    className="main-page__btn"
+                                    onClick={() => setShowRecommendationsDialog(true)}
+                                />
+                            </div>
+                        )}
                         <div className="main-page__dates">
                             <div>Дата создания: {selectedElementInfo.onCreated}</div>
                             <div>Дата обновления: {selectedElementInfo.onUpdated}</div>
@@ -339,6 +357,7 @@ export const MainPage: FC = () => {
                                     className="main-page__btn"
                                     onClick={() => completeGoalHandler(selectedElementInfo.id)}
                                 />
+                                
                             </div>
                         )}
                     </div>

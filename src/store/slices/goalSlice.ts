@@ -5,7 +5,8 @@ import {
     createGoal,
     updateGoal,
     deleteGoal,
-    completeGoal
+    completeGoal,
+    getGoalRecommendations
   } from '../../services/goalService';
 import { GoalDto } from '../../types/apiTypes';
 
@@ -16,6 +17,10 @@ interface GoalState {
   selectedGoal: GoalDto | null;
   loading: boolean;
   error: string | null;
+  recommendations: string | null;
+  recommendationsLoading: boolean;
+  recommendationsError: string | null;
+  cachedRecommendations: Record<number, string>;
 }
 
 const initialState: GoalState = {
@@ -25,6 +30,10 @@ const initialState: GoalState = {
   selectedGoal: null,
   loading: false,
   error: null,
+  recommendations: null,
+  recommendationsLoading: false,
+  recommendationsError: null,
+  cachedRecommendations: {}
 };
 
 const isRejectedAction = (action: AnyAction): action is AnyAction & { payload: string } => {
@@ -42,7 +51,12 @@ const goalSlice = createSlice({
     clearSelectedGoal(state) {
       state.selectedGoal = null;
     },
+    clearRecommendations: (state) => {
+      state.recommendations = null;
+      state.recommendationsError = null;
+    }
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchGoals.pending, (state) => {
@@ -106,6 +120,17 @@ const goalSlice = createSlice({
           state.selectedGoal = completedGoal;
         }
       })
+      .addCase(getGoalRecommendations.pending, (state) => {
+        state.recommendationsLoading = true;
+        state.recommendationsError = null;
+      })
+      .addCase(getGoalRecommendations.fulfilled, (state, action) => {
+        state.cachedRecommendations[action.meta.arg] = action.payload;
+      })
+      .addCase(getGoalRecommendations.rejected, (state, action) => {
+        state.recommendationsLoading = false;
+        state.recommendationsError = action.payload as string;
+      })
       
       .addMatcher(isRejectedAction, (state, action) => {
         state.loading = false;
@@ -120,3 +145,4 @@ const goalSlice = createSlice({
 
 export const { clearSelectedGoal } = goalSlice.actions;
 export const goalReducer = goalSlice.reducer;
+export const { clearRecommendations } = goalSlice.actions;

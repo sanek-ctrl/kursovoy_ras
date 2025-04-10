@@ -64,6 +64,9 @@ export const MainPage: FC = () => {
             navigate(`${RoutesPaths.Main}`);
             dispatch(fetchGoals(true));
             dispatch(fetchGoals(false));
+            // Сброс выбранного элемента при смене пользователя
+            setSelectedElementId(null);
+            dispatch(clearSelectedGoal());
         } else {
             navigate(`${RoutesPaths.Login}`);
         }
